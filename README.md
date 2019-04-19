@@ -46,7 +46,7 @@ fn main() {
 # Features
 
 1. Basic CLI (DONE)
-2. Use TCaps to handle keyboard input
-3. Arguments validation
-4. Provide method to run `bash` on top of the CLI
-5. History
+2. Use TCaps to handle keyboard input (IN PROGRESS)
+3. Arguments validation (TO DO)
+4. Provide method to run `bash` on top of the CLI (TO DO)
+5. History (TO DO)
