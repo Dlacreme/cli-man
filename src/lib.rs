@@ -1,3 +1,6 @@
+extern crate regex;
+extern crate termion;
+
 pub mod cli;
 pub mod command;
 pub mod input;

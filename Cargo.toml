@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 regex = "1.1.6"
+termion = "1.5.1"
