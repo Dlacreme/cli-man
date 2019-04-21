@@ -5,7 +5,7 @@ use std::io::{Write, stdout, stdin};
 
 pub struct Tcaps {
     x: u16,
-    y: u16
+    y: u16,
     pub prompt: String,
     stdout: RawTerminal<std::io::Stdout>,
 }
@@ -31,13 +31,16 @@ impl Tcaps {
         for raw_key in stdin().lock().keys() {
             let k = raw_key?;
             match k {
-                Key::Char('\n') => {
+                    Key::Char('\n') => {
                     self.y += 1;
                     return Ok(buffer);
                 },
                 Key::Char(c)    => buffer.push(c),
                 Key::Alt(c)     => self.handle_alt(c)?,
                 Key::Ctrl(c)    => self.handle_ctrl(c)?,
+                Key::Backspace  => {
+                    buffer.pop();
+                }
                 Key::Left       => println!("<left>"),
                 Key::Right      => println!("<right>"),
                 Key::Up         => println!("<up>"),
@@ -97,8 +100,8 @@ impl Tcaps {
     }
 
     pub fn println(&mut self, content: &str) -> std::io::Result<()> {
-        self.set_cursor(1, self.line_index);
-        self.line_index += 1;
+        self.set_cursor(1, self.y);
+        self.y += 1;
         write!(self.stdout, "{}\n", content)?;
         self.stdout.flush().unwrap();
         Ok(())
