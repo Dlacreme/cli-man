@@ -2,8 +2,10 @@ extern crate regex;
 extern crate termion;
 
 pub mod cli;
-pub mod command;
 pub mod input;
+
+mod tcaps;
+mod command;
 
 #[cfg(test)]
 mod tests {
@@ -20,14 +22,14 @@ mod tests {
     #[test]
     fn it_works() {
         let mut app: Cli<Command> = super::cli::Cli::new();
-        app.set_prompt("HELLO");
+        app.set_prompt("Cli Man $>");
         app.push_command(
             Command::Exit,
             "^exit$",
             String::from("Properly exit this command line")
         );
         loop {
-            let e = match app.listen() {
+            let e = match app.wait_input() {
                 Ok(ev) => ev,
                 Err(_) => return assert!(false),
             };
