@@ -1,48 +1,40 @@
-use std::io::{Write, stdout};
-
-use super::command::{Command};
-use super::input::{Input};
+use super::command::Command;
+use super::input::Input;
+use super::tcaps;
 
 pub struct Cli<T: Clone> {
     prompt: String,
     commands: Vec<Command<T>>,
+    stdout: tcaps::Tcaps,
 }
 
 impl<T: Clone> Cli<T> {
-
     pub fn new() -> Cli<T> {
-        Cli {
-            prompt: String::from("$> "),
+        let default_prompt = String::from("$> ");
+        let app = Cli {
             commands: Vec::new(),
-        }
+            stdout: tcaps::Tcaps::new(default_prompt.clone()),
+            prompt: default_prompt,
+        };
+        return app;
     }
 
     pub fn set_prompt(&mut self, content: &str) {
         self.prompt = format!("{} ", content);
+        self.stdout.prompt = self.prompt.clone();
     }
 
     pub fn push_command(&mut self, key: T, pattern: &str, help: String) {
-        self.commands.push(Command::new(
-            key,
-            pattern,
-            help,
-        ));
+        self.commands.push(Command::new(key, pattern, help));
     }
 
-    pub fn listen(&self) -> Result<Input<T>, std::io::Error> {
-        loop {
-            print!("{}", self.prompt);
-            stdout().flush().unwrap();
-            let mut buffer = String::new();
-            match std::io::stdin().read_line(&mut buffer) {
-                Ok(_) => {
-                    match self.handle_input(&buffer) {
-                        Some(cmd) => return Ok(Input::new(cmd.key.clone(), buffer)),
-                        None => { }
-                    }
-                }, Err(e) => {
-                    return Err(e);
-                }
+    pub fn wait_input(&mut self) -> Result<Input<T>, std::io::Error> {
+        let mut input = self.stdout.read_line()?;
+        match self.handle_input(&mut input) {
+            Some(cmd) => return Ok(Input::new(cmd.key.clone(), input)),
+            None => {
+                self.stdout.println("Invalid command")?;
+                return self.wait_input();
             }
         }
     }
@@ -56,5 +48,4 @@ impl<T: Clone> Cli<T> {
         }
         return None;
     }
-
 }
