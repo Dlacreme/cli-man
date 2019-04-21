@@ -6,18 +6,30 @@ pub struct Cli<T: Clone> {
     prompt: String,
     commands: Vec<Command<T>>,
     stdout: tcaps::Tcaps,
+    welcome: String,
+    help: String,
 }
 
 impl<T: Clone> Cli<T> {
 
-    pub fn new() -> Cli<T> {
+    pub fn new(welcome: String, help: String) -> Cli<T> {
         let default_prompt = String::from("$> ");
         let app = Cli {
             commands: Vec::new(),
             stdout: tcaps::Tcaps::new(default_prompt.clone()),
             prompt: default_prompt,
+            welcome: welcome,
+            help: help,
         };
         return app;
+    }
+
+    pub fn print_welcome(&mut self) -> std::io::Result<()> {
+        self.stdout.print_focus(self.welcome.as_str())
+    }
+
+    pub fn print_help(&mut self) -> std::io::Result<()> {
+        self.stdout.print_focus(self.help.as_str())
     }
 
     pub fn set_prompt(&mut self, content: &str) {

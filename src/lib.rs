@@ -21,8 +21,9 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let mut app: Cli<Command> = super::cli::Cli::new();
+        let mut app: Cli<Command> = super::cli::Cli::new(String::from("Welcome here!"), String::from("This is the help"));
         app.set_prompt("Cli Man $>");
+        app.print_welcome();
         app.push_command(
             Command::Exit,
             "^exit$",

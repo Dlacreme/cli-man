@@ -84,6 +84,16 @@ impl Tcaps {
 
     /* PRINTER */
 
+    pub fn print_focus(&mut self, content: &str) -> std::io::Result<()> {
+        self.clear()?;
+        self.println(content)?;
+        for _ in stdin().lock().keys() {
+            self.clear()?;
+            return Ok(());
+        }
+        unreachable!();
+    }
+
     pub fn print_prompt(&mut self) -> std::io::Result<()> {
         write!(self.stdout, "{}", self.prompt.as_str())?;
         self.stdout.flush().unwrap();
