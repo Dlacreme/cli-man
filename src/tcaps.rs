@@ -30,17 +30,36 @@ impl Tcaps {
             let k = raw_key?;
             match k {
                 Key::Char('\n') => {
-
                     self.line_index += 1;
                     return Ok(buffer);
                 },
-                Key::Char(c) => buffer.push(c),
+                Key::Char(c)    => buffer.push(c),
+                Key::Alt(c)     => self.handle_alt(c)?,
+                Key::Ctrl(c)    => self.handle_ctrl(c)?,
+                Key::Left       => println!("<left>"),
+                Key::Right      => println!("<right>"),
+                Key::Up         => println!("<up>"),
+                Key::Down       => println!("<down>"),
                 _ => (),
             }
             write!(self.stdout, "{}{}", termion::cursor::Goto(1, self.line_index), termion::clear::CurrentLine).unwrap();
             self.print_with_prompt(buffer.as_str())?;
         }
         unreachable!();
+    }
+
+    /* Handlers */
+
+    pub fn handle_alt(&mut self, c: char) -> std::io::Result<()> {
+        Ok(())
+    }
+
+    pub fn handle_ctrl(&mut self, c: char) -> std::io::Result<()> {
+        match c {
+            'l' => self.clear()?,
+            _   => {},
+        }
+        Ok(())
     }
 
     /* TERM Actions */
