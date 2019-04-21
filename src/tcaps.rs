@@ -56,6 +56,9 @@ impl Tcaps {
     /* Handlers */
 
     pub fn handle_alt(&mut self, c: char) -> std::io::Result<()> {
+        match c {
+            _ => {}
+        }
         Ok(())
     }
 

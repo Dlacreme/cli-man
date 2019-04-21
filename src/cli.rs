@@ -9,6 +9,7 @@ pub struct Cli<T: Clone> {
 }
 
 impl<T: Clone> Cli<T> {
+
     pub fn new() -> Cli<T> {
         let default_prompt = String::from("$> ");
         let app = Cli {
@@ -48,4 +49,5 @@ impl<T: Clone> Cli<T> {
         }
         return None;
     }
+
 }
