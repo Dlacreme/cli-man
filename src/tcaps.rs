@@ -103,7 +103,7 @@ impl Tcaps {
     }
 
     pub fn print(&mut self, content: &str) -> std::io::Result<()> {
-        self.y += content.matches("\n").count() as u16;
+        // self.y += final_content.matches("\n").count() as u16;
         write!(self.stdout, "{}", content)?;
         self.stdout.flush().unwrap();
         Ok(())
@@ -117,10 +117,9 @@ impl Tcaps {
 
     pub fn println(&mut self, content: &str) -> std::io::Result<()> {
         self.set_cursor(1, self.y)?;
-        let final_content = format!("{}/n", content);
-        self.y += final_content.matches("\n").count() as u16;
-        write!(self.stdout, "{}", content)?;
-        self.stdout.flush().unwrap();
+        self.y += 1;
+        write!(self.stdout, "{}\n", content)?;
+        self.stdout.flush()?;
         Ok(())
     }
 
