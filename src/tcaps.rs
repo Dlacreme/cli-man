@@ -83,10 +83,12 @@ impl Tcaps {
     }
 
     /* PRINTER */
-
     pub fn print_focus(&mut self, content: &str) -> std::io::Result<()> {
         self.clear()?;
+        self.println("(Press any key to quit)\n")?;
+        self.println("")?;
         self.println(content)?;
+        self.set_cursor(1, 1)?;
         for _ in stdin().lock().keys() {
             self.clear()?;
             return Ok(());
@@ -113,7 +115,7 @@ impl Tcaps {
     }
 
     pub fn println(&mut self, content: &str) -> std::io::Result<()> {
-        self.set_cursor(1, self.y);
+        self.set_cursor(1, self.y)?;
         self.y += 1;
         write!(self.stdout, "{}\n", content)?;
         self.stdout.flush().unwrap();
