@@ -2,7 +2,7 @@
 
 Small library to create a basic CLI program.
 
-# Usage
+## Usage
 
 ```rust
 
@@ -43,7 +43,7 @@ fn main() {
 
 ```
 
-# Features
+## Features
 
 1. Basic CLI (DONE)
 2. Use TCaps to handle keyboard input (IN PROGRESS)
