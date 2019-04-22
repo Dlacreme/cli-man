@@ -20,23 +20,26 @@ impl<T: Clone> Cli<T> {
         return app;
     }
 
-    pub fn reset_term(&mut self) -> std::io::Result<()> {
-        self.stdout.print("\n")
-    }
-
-    pub fn print_focus_mode(&mut self, content: &str) -> std::io::Result<()> {
-        self.stdout.print_focus(content)
-    }
-
+    /**
+     * update the text displayed before the user input
+     */
     pub fn set_prompt(&mut self, content: &str) {
         self.prompt = format!("{} ", content);
         self.stdout.prompt = self.prompt.clone();
     }
 
+    /**
+     * Insert a new command
+     * An event will be raised every time user input matches $pattern
+     */
     pub fn push_command(&mut self, key: T, pattern: &str, help: String) {
         self.commands.push(Command::new(key, pattern, help));
     }
 
+    /**
+     * Will read user input and wait for an existing command (previously inserted via
+     * `push_command`
+     */
     pub fn wait_input(&mut self) -> Result<Input<T>, std::io::Error> {
         let mut input = self.stdout.read_line()?;
         match self.handle_input(&mut input) {
@@ -48,6 +51,48 @@ impl<T: Clone> Cli<T> {
         }
     }
 
+    /**
+     * reset_term should be called just before the cli ends
+     */
+    pub fn reset_term(&mut self) -> std::io::Result<()> {
+        self.stdout.print("\n")
+    }
+
+    /** OUTPUT
+     */
+
+    /**
+     * Clear the terminal
+     */
+    pub fn clear(&mut self) -> std::io::Result<()> {
+        self.stdout.clear()
+    }
+
+    /**
+     * Display content
+     */
+    pub fn print(&mut self, content: &str) -> std::io::Result<()> {
+        self.stdout.print(content)
+    }
+
+    /**
+     * Display content and insert new like markup (\n)
+     */
+    pub fn println(&mut self, content: &str) -> std::io::Result<()> {
+        self.stdout.println(content)
+    }
+
+    /**
+     * Print $content on full screen mode
+     */
+    pub fn print_focus_mode(&mut self, content: &str) -> std::io::Result<()> {
+        self.stdout.print_focus(content)
+    }
+
+
+    /**
+     * Private
+     */
     fn handle_input(&self, raw_input: &String) -> Option<(&Command<T>)> {
         let input = raw_input.trim();
         for cmd in self.commands.iter() {
@@ -57,5 +102,4 @@ impl<T: Clone> Cli<T> {
         }
         return None;
     }
-
 }

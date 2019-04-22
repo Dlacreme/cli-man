@@ -23,7 +23,7 @@ mod tests {
     fn it_works() {
         let mut app: Cli<Command> = super::cli::Cli::new();
         app.set_prompt("Cli Man $>");
-        app.print_focus_mode("HelloWorld!");
+        app.println("Hello \n world\n");
         app.push_command(
             Command::Exit,
             "^exit$",
