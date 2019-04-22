@@ -1,5 +1,5 @@
 [package]
-name = "cli-man"
+name = "cli_man"
 version = "0.1.0"
 authors = ["Mathieu <dlacreme@gmail.com>"]
 edition = "2018"
